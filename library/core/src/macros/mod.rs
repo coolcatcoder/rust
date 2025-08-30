@@ -1781,4 +1781,11 @@ pub(crate) mod builtin {
     pub macro From($item: item) {
         /* compiler built-in */
     }
+
+    /// Something.
+    #[unstable(feature = "my_testing", issue = "none")]
+    #[rustc_builtin_macro]
+    pub macro gather_types($visibility:vis type $identifier:ident) {
+        /* compiler built-in */
+    }
 }

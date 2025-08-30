@@ -44,6 +44,7 @@ mod env;
 mod errors;
 mod format;
 mod format_foreign;
+mod gather_types;
 mod global_allocator;
 mod iter;
 mod log_syntax;
@@ -120,6 +121,7 @@ pub fn register_builtin_macros(resolver: &mut dyn ResolverExpand) {
         derive: derive::Expander { is_const: false },
         derive_const: derive::Expander { is_const: true },
         global_allocator: global_allocator::expand,
+        gather_types: gather_types::expand,
         test: test::expand_test,
         test_case: test::expand_test_case,
         // tidy-alphabetical-end

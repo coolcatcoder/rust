@@ -3659,6 +3659,13 @@ pub struct TyAlias {
     pub ty: Option<Box<Ty>>,
 }
 
+#[derive(Clone, Encodable, Decodable, Debug, Walkable)]
+pub struct TyGive {
+    pub ident: Ident,
+    pub to: Box<Ty>,
+    pub ty: Box<Ty>,
+}
+
 #[derive(Clone, Encodable, Decodable, Debug)]
 pub struct Impl {
     pub generics: Generics,
@@ -3774,6 +3781,8 @@ pub enum ItemKind {
     ///
     /// E.g., `type Foo = Bar<u8>;`.
     TyAlias(Box<TyAlias>),
+    /// Gives a type.
+    TyGive(Box<TyGive>),
     /// An enum definition (`enum`).
     ///
     /// E.g., `enum Foo<A, B> { C<A>, D<B> }`.

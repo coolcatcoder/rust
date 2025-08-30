@@ -2657,6 +2657,56 @@ impl<'tcx> dyn HirTyLowerer<'tcx> + '_ {
         }
     }
 
+    /// Lower a gathering of types from the HIR.
+    #[instrument(level = "debug", skip(self), ret)]
+    fn lower_ty_gather(&self, def_id: LocalDefId, in_trait: Option<LocalDefId>) -> Ty<'tcx> {
+        let tcx = self.tcx();
+
+        let lifetimes = tcx.opaque_captured_lifetimes(def_id);
+        debug!(?lifetimes);
+
+        // If this is an RPITIT and we are using the new RPITIT lowering scheme,
+        // do a linear search to map this to the synthetic associated type that
+        // it will be lowered to.
+        let def_id = if let Some(parent_def_id) = in_trait {
+            *tcx.associated_types_for_impl_traits_in_associated_fn(parent_def_id.to_def_id())
+                .iter()
+                .find(|rpitit| match tcx.opt_rpitit_info(**rpitit) {
+                    Some(ty::ImplTraitInTraitData::Trait { opaque_def_id, .. }) => {
+                        opaque_def_id.expect_local() == def_id
+                    }
+                    _ => unreachable!(),
+                })
+                .unwrap()
+        } else {
+            def_id.to_def_id()
+        };
+
+        let generics = tcx.generics_of(def_id);
+        debug!(?generics);
+
+        // We use `generics.count() - lifetimes.len()` here instead of `generics.parent_count`
+        // since return-position impl trait in trait squashes all of the generics from its source fn
+        // into its own generics, so the opaque's "own" params isn't always just lifetimes.
+        let offset = generics.count() - lifetimes.len();
+
+        let args = ty::GenericArgs::for_item(tcx, def_id, |param, _| {
+            if let Some(i) = (param.index as usize).checked_sub(offset) {
+                let (lifetime, _) = lifetimes[i];
+                self.lower_resolved_lifetime(lifetime).into()
+            } else {
+                tcx.mk_param_from_def(param)
+            }
+        });
+        debug!(?args);
+
+        if in_trait.is_some() {
+            Ty::new_projection_from_args(tcx, def_id, args)
+        } else {
+            Ty::new_opaque(tcx, def_id, args)
+        }
+    }
+
     /// Lower a function type from the HIR to our internal notion of a function signature.
     #[instrument(level = "debug", skip(self, hir_id, safety, abi, decl, generics, hir_ty), ret)]
     pub fn lower_fn_ty(

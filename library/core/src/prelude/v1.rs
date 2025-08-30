@@ -117,3 +117,6 @@ pub use crate::macros::builtin::deref;
     reason = "`type_alias_impl_trait` has open design concerns"
 )]
 pub use crate::macros::builtin::define_opaque;
+
+#[unstable(feature = "my_testing", issue = "none")]
+pub use crate::macros::builtin::gather_types;
