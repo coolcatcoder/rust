@@ -517,6 +517,8 @@ declare_features! (
     (internal, freeze_impls, "1.78.0", Some(121675)),
     /// Frontmatter `---` blocks for use by external tools.
     (unstable, frontmatter, "1.88.0", Some(136889)),
+    /// Allows the gathering of implementations.
+    (incomplete, gather_and_iter_implementations, "CURRENT_RUSTC_VERSION", None),
     /// Allows defining gen blocks and `gen fn`.
     (unstable, gen_blocks, "1.75.0", Some(117078)),
     /// Allows non-trivial generic constants which have to have wfness manually propagated to callers

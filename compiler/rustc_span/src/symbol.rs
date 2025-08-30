@@ -1109,6 +1109,7 @@ symbols! {
         future_output,
         future_trait,
         fxsr,
+        gather_and_iter_implementations,
         gdb_script_file,
         ge,
         gen_blocks,
