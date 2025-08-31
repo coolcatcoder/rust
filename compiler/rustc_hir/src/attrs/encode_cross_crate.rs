@@ -48,6 +48,7 @@ impl AttributeKind {
             FfiConst(..) => No,
             FfiPure(..) => No,
             Fundamental { .. } => Yes,
+            GatherImplementations { .. } => No,
             Ignore { .. } => No,
             Inline(..) => No,
             Link(..) => No,

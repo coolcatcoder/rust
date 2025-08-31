@@ -176,3 +176,13 @@ impl<S: Stage> NoArgsAttributeParser<S> for PointeeParser {
     const ALLOWED_TARGETS: AllowedTargets = AllowedTargets::AllowList(ALL_TARGETS); //FIXME Still checked fully in `check_attr.rs`
     const CREATE: fn(Span) -> AttributeKind = AttributeKind::Pointee;
 }
+
+// Gather and iter implementations
+
+pub(crate) struct GatherImplementationsParser;
+impl<S: Stage> NoArgsAttributeParser<S> for GatherImplementationsParser {
+    const PATH: &[Symbol] = &[sym::gather_implementations];
+    const ON_DUPLICATE: OnDuplicate<S> = OnDuplicate::Warn;
+    const ALLOWED_TARGETS: AllowedTargets = AllowedTargets::AllowList(&[Allow(Target::Trait)]);
+    const CREATE: fn(Span) -> AttributeKind = AttributeKind::GatherImplementations;
+}

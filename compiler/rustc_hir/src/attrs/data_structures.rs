@@ -522,6 +522,9 @@ pub enum AttributeKind {
     /// Represents `#[fundamental]`.
     Fundamental,
 
+    /// Represents `#[gather_implementations]`
+    GatherImplementations(Span),
+
     /// Represents `#[ignore]`
     Ignore {
         span: Span,
