@@ -176,3 +176,40 @@ impl<S: Stage> NoArgsAttributeParser<S> for PointeeParser {
     const ALLOWED_TARGETS: AllowedTargets = AllowedTargets::AllowList(ALL_TARGETS); //FIXME Still checked fully in `check_attr.rs`
     const CREATE: fn(Span) -> AttributeKind = AttributeKind::Pointee;
 }
+
+// Magic Portal
+
+pub(crate) struct MagicPortalSendToParser;
+impl<S: Stage> SingleAttributeParser<S> for MagicPortalSendToParser {
+    const PATH: &[Symbol] = &[sym::magic_portal_send_to];
+    const ATTRIBUTE_ORDER: AttributeOrder = AttributeOrder::KeepInnermost;
+    const ON_DUPLICATE: OnDuplicate<S> = OnDuplicate::Error;
+    const ALLOWED_TARGETS: AllowedTargets = AllowedTargets::AllowList(&[Allow(Target::Struct)]);
+
+    const TEMPLATE: AttributeTemplate = template!(List: &["portal"]);
+
+    fn convert(cx: &mut AcceptContext<'_, '_, S>, args: &ArgParser<'_>) -> Option<AttributeKind> {
+        let Some(portal) = args.list() else {
+            cx.expected_list(cx.attr_span);
+            return None;
+        };
+        let Some(portal) = portal.single() else {
+            cx.expected_single_argument(cx.attr_span);
+            return None;
+        };
+        let Some(portal) = portal.meta_item() else {
+            cx.expected_identifier(cx.attr_span);
+            return None;
+        };
+
+        if let Err(args_span) = portal.args().no_args() {
+            cx.expected_no_args(args_span);
+            return None;
+        }
+
+        Some(AttributeKind::MagicPortalSendTo(
+            portal.path().segments().map(|ident| ident.name).collect(),
+            cx.attr_span,
+        ))
+    }
+}

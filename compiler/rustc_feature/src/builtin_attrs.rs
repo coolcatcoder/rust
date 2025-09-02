@@ -887,6 +887,9 @@ pub static BUILTIN_ATTRIBUTES: &[BuiltinAttribute] = &[
         EncodeCrossCrate::No, loop_match, experimental!(loop_match)
     ),
 
+    // Magic portal.
+    gated!(magic_portal_send_to, Normal, template!(List: &["portal"]), ErrorFollowing, EncodeCrossCrate::Yes, magic_portal, experimental!(magic_portal)),
+
     // ==========================================================================
     // Internal attributes: Stability, deprecation, and unsafe:
     // ==========================================================================

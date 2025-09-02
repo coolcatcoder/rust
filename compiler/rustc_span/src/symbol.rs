@@ -1349,6 +1349,8 @@ symbols! {
         macro_use,
         macro_vis_matcher,
         macros_in_extern,
+        magic_portal,
+        magic_portal_send_to,
         main,
         managed_boxes,
         manually_drop,

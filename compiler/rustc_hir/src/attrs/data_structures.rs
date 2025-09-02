@@ -559,6 +559,9 @@ pub enum AttributeKind {
     /// Represents `#[macro_use]`.
     MacroUse { span: Span, arguments: MacroUseArgs },
 
+    /// Represents `#[magic_portal_send_to]`.
+    MagicPortalSendTo(ThinVec<Symbol>, Span),
+
     /// Represents `#[marker]`.
     Marker(Span),
 

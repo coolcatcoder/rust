@@ -59,9 +59,10 @@ use crate::attributes::stability::{
 use crate::attributes::test_attrs::{IgnoreParser, ShouldPanicParser};
 use crate::attributes::traits::{
     AllowIncoherentImplParser, CoherenceIsCoreParser, CoinductiveParser, ConstTraitParser,
-    DenyExplicitImplParser, DoNotImplementViaObjectParser, FundamentalParser, MarkerParser,
-    ParenSugarParser, PointeeParser, SkipDuringMethodDispatchParser, SpecializationTraitParser,
-    TypeConstParser, UnsafeSpecializationMarkerParser,
+    DenyExplicitImplParser, DoNotImplementViaObjectParser, FundamentalParser,
+    MagicPortalSendToParser, MarkerParser, ParenSugarParser, PointeeParser,
+    SkipDuringMethodDispatchParser, SpecializationTraitParser, TypeConstParser,
+    UnsafeSpecializationMarkerParser,
 };
 use crate::attributes::transparency::TransparencyParser;
 use crate::attributes::{AttributeParser as _, Combine, Single, WithoutArgs};
@@ -181,6 +182,7 @@ attribute_parsers!(
         Single<LinkOrdinalParser>,
         Single<LinkSectionParser>,
         Single<LinkageParser>,
+        Single<MagicPortalSendToParser>,
         Single<MustUseParser>,
         Single<OptimizeParser>,
         Single<PathAttributeParser>,

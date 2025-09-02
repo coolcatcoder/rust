@@ -59,6 +59,7 @@ impl AttributeKind {
             MacroEscape(..) => No,
             MacroTransparency(..) => Yes,
             MacroUse { .. } => No,
+            MagicPortalSendTo(..) => Yes,
             Marker(..) => No,
             MayDangle(..) => No,
             MustUse { .. } => Yes,
